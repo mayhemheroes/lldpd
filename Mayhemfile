@@ -1,0 +1,6 @@
+project: rnshah9/lldpd
+target: lldpd
+tests: null
+
+cmds:
+  - cmd: /build/tests/decode @@
