@@ -1,5 +1,5 @@
 project: rnshah9/lldpd
-target: lldpd
+target: decode
 tests: null
 
 cmds:
