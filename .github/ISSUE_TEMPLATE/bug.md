@@ -14,7 +14,7 @@ unlikely it just does not work. Instead, use the
 questions.
 
 When putting code snippets (logs, commands), put them between triple
-backquotes:
+backticks:
 
 ```
 # lldpcli -vv

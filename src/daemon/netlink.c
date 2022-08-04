@@ -684,6 +684,11 @@ retry:
 					goto end;
 				}
 				if (netlink_parse_address(msg, ifanew) == 0) {
+					if (ifanew->address.ss_family == AF_INET6 &&
+					    ifanew->flags & IFA_F_TEMPORARY) {
+						interfaces_free_address(ifanew);
+						break;
+					}
 					TAILQ_FOREACH(ifaold, ifas, next) {
 						if ((ifaold->index == ifanew->index) &&
 						    !memcmp(&ifaold->address, &ifanew->address,
