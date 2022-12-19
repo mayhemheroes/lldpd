@@ -23,11 +23,11 @@ RUN make
 RUN make install DESTDIR=/lldpd
 WORKDIR /build/tests
 RUN make check
-RUN clang++ /build/mayhem/fuzz.cpp -fsanitize=fuzzer,address /build/src/daemon/.libs/liblldpd.a -o /fuzz
+RUN clang++ /build/mayhem/fuzz_pattern_match.cpp -fsanitize=fuzzer,address /build/src/daemon/.libs/liblldpd.a -o /fuzz
 
 FROM ubuntu:22.04  as package
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libbsd-dev libevent-dev
 
 COPY --from=builder /build/tests/decode /build/tests/decode
-COPY --from=builder /fuzz /fuzz
+COPY --from=builder /fuzz /fuzz_pattern_match
