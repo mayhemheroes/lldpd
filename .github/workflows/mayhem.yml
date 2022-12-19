@@ -59,7 +59,8 @@ jobs:
       fail-fast: false
       matrix:
         mayhemfile:
-          - mayhem/Mayhemfile
+          - mayhem/Mayhemfile_pattern_match
+          - mayhem/Mayhemfile_decode
 
     steps:
       - uses: actions/checkout@v3

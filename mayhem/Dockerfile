@@ -1,8 +1,8 @@
-FROM alpine:latest as builder
-RUN apk add autoconf automake libtool \
-	libevent-dev libxml2-dev jansson-dev \
-        readline-dev libcap-dev bsd-compat-headers \
-        alpine-sdk
+FROM ubuntu:22.04  as builder
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y autoconf automake libtool git pkg-config clang\
+	libevent-dev libxml2-dev libjansson-dev \
+        libreadline-dev libcap-dev libbsd-dev build-essential
 WORKDIR /build
 COPY . .
 RUN ./autogen.sh
@@ -23,11 +23,11 @@ RUN make
 RUN make install DESTDIR=/lldpd
 WORKDIR /build/tests
 RUN make check
-RUN mkdir -p /deps
-RUN ldd /build/tests/decode | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
+RUN clang++ /build/mayhem/fuzz.cpp -fsanitize=fuzzer,address /build/src/daemon/.libs/liblldpd.a -o /fuzz
 
-FROM alpine:latest as package
+FROM ubuntu:22.04  as package
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libbsd-dev libevent-dev
 
-COPY --from=builder /deps /deps
 COPY --from=builder /build/tests/decode /build/tests/decode
-ENV LD_LIBRARY_PATH=/deps
+COPY --from=builder /fuzz /fuzz
