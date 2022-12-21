@@ -1,0 +1,6 @@
+project: lldpd
+target: pattern-match
+
+cmds:
+  - cmd: /fuzz_pattern_match
+    libfuzzer: true

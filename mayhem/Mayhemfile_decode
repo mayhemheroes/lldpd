@@ -1,0 +1,5 @@
+project: lldpd
+target: decode
+
+cmds:
+  - cmd: /build/tests/decode @@
